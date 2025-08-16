@@ -8,14 +8,16 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(cors());
-app.use(express.json());
+// Middleware setup
+app.use(cors()); // Enable CORS for all requests
+app.use(express.json()); // Parse JSON request bodies
 
 // Connect to MongoDB with appropriate options
 mongoose.connect('mongodb://localhost:27017/iteration-planning', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
+// Basic API endpoint
 app.get('/', (req, res) => {
   res.send('Iteration Planning Tool API');
 });
@@ -28,6 +30,7 @@ io.on('connection', (socket) => {
   });
 });
 
+// Set the server to listen on the specified port
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
